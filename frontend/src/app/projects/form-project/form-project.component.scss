@@ -1,0 +1,31 @@
+h1 {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+
+}
+
+mat-form-field.full-width {
+  margin-top: 8px;
+  width: calc(50% - 0.5rem);
+  margin-right: 1rem;
+  margin-bottom: 1rem; // Add margin at the bottom for each row
+
+  &:nth-child(2n) {
+    margin-right: 0; // No f margin for the second item in each row
+  }
+
+  &:last-child {
+    margin-right: 0;
+  }
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1.5rem;
+
+  button {
+    width: 48%;
+  }
+}
+

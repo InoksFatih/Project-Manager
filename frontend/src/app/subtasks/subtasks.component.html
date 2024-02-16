@@ -1,0 +1,90 @@
+<h1>Subtasks</h1>
+<div class="card">
+  <div class="card-head">All Subtasks</div>
+  <div class="card-body">
+    <div class="card-body-buttons">
+      <mat-form-field appearance="outline">
+        <mat-label>Filter Table</mat-label>
+        <input matInput placeholder="" search (keyup)="applyFilter($event)">
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" (click)="openSubtaskDialog()">
+        Add Subtask
+      </button>
+    </div>
+    <mat-table [dataSource]="dataSource" matSort>
+
+      <ng-container matColumnDef="title">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Title</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{element.title}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="dueDate">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Due Date</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{element.dueDate | date: 'shortDate'}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <mat-header-cell *matHeaderCellDef mat-sort-header class="mat-column-status">Status</mat-header-cell>
+        <mat-cell *matCellDef="let element" >
+          <mat-form-field class="status-field mat-form-field-center">
+            <mat-select [(ngModel)]="element.status" (selectionChange)="updateStatus($event.value, element)">
+              <mat-select-trigger [ngStyle]="{ 'color': getStatusColor(element.status) }">
+                {{ this.getStatusValue(element.status) }}
+              </mat-select-trigger>
+              <mat-option *ngFor="let status of listeStatus" [value]="status">
+                {{ this.getStatusValue(status) }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="priority">
+        <mat-header-cell *matHeaderCellDef mat-sort-header class="mat-column-priority">Priority</mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <mat-form-field class="assignPerson-field mat-form-field-center">
+            <mat-select (selectionChange)="updatePriority($event.value, element)" [(ngModel)]="element.priority">
+              <mat-select-trigger [ngStyle]="{ 'color': getPriorityColor(element.priority) }">
+                {{ this.getPriorityValue(element.priority) }}
+              </mat-select-trigger>
+              <mat-option *ngFor="let priority of listePriority" [value]="priority" [ngStyle]="{ 'color': getPriorityColor(priority) } ">
+                {{ this.getPriorityValue(priority) }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef class="mat-column-actions">Actions</mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <button mat-icon-button class="blue-button" [matMenuTriggerFor]="subtaskActionsMenu">
+            <mat-icon class="blue-button">more_vert</mat-icon>
+          </button>
+          <mat-menu #subtaskActionsMenu="matMenu">
+            <button mat-menu-item class="blue-button" (click)="viewSubtask(element)">
+              <mat-icon class="blue-button">visibility</mat-icon>
+              <span>View</span>
+            </button>
+            <button mat-menu-item class="green-button" (click)="openSubtaskDialog(element)">
+              <mat-icon class="green-button">create</mat-icon>
+              <span>Edit</span>
+            </button>
+            <button mat-menu-item class="red-button" (click)="deleteSubtask(element.id)">
+              <mat-icon class="red-button">delete_outline</mat-icon>
+              <span>Delete</span>
+            </button>
+          </mat-menu>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+    <div *ngIf="dataSource.data.length === 0" class="empty-table-message">
+      No subtasks available.
+    </div>
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true" aria-label="Select page of subtasks"></mat-paginator>
+  </div>
+</div>

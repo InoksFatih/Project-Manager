@@ -1,0 +1,89 @@
+<h1>Projects</h1>
+<div class="card">
+  <div class="card-head">All Projects</div>
+  <div class="card-body">
+    <div class="card-body-buttons">
+      <mat-form-field appearance="outline">
+        <mat-label>Filter Table</mat-label>
+        <input matInput placeholder="" search (keyup)="applyFilter($event)">
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" (click)="openProjectDialog()">
+        Add Project
+      </button>
+    </div>
+
+    <mat-table [dataSource]="dataSource" matSort>
+
+      <ng-container matColumnDef="title">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Title </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.title}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="dueDate" >
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Due Date </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.dueDate | date:'short'}} </mat-cell>
+      </ng-container>
+
+
+      <ng-container matColumnDef="status">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Status </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.status}} </mat-cell>
+      </ng-container>
+
+
+      <ng-container matColumnDef="priority">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Priority </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.priority}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="projectClient">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Project Client </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.projectClient?.name}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="tasks">
+        <mat-header-cell *matHeaderCellDef> Tasks </mat-header-cell>
+        <mat-cell *matCellDef="let project">
+          <button mat-icon-button color="primary" (click)="redirectToTasks(project.id)">
+            <mat-icon>list</mat-icon>
+            <span class="badge" matBadge="{{getTasksCount(project)}}" matBadgePosition="above after"></span>
+          </button>
+        </mat-cell>
+      </ng-container>
+
+
+
+      <ng-container matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <ng-container *ngIf="!element.editMode">
+            <button mat-icon-button color="primary" (click)="openProjectDialog(element)">
+              <mat-icon>create</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" (click)="deleteProject(element.id)">
+              <mat-icon>delete_outline</mat-icon>
+            </button>
+          </ng-container>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+    <div *ngIf="dataSource.data.length === 0" class="empty-table-message">
+      No projects available.
+    </div>
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+                   [showFirstLastButtons]="true"
+                   aria-label="Select page of periodic elements">
+    </mat-paginator>
+
+  </div>
+</div>
+<div class="card">
+  <div class="card-head">Lorem Ipsum - Project 2</div>
+  <div class="card-body">
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. In eu orci enim. Nam vitae eros in lacus gravida faucibus id in orci. Donec a interdum purus. Sed interdum purus arcu, non pulvinar lacus imperdiet sed. Mauris volutpat pellentesque ipsum
+  </div>
+</div>

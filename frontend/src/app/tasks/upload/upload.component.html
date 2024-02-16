@@ -1,0 +1,27 @@
+<h1 mat-dialog-title>Upload</h1>
+<div mat-dialog-content>
+  <form #attachementForm="ngForm" (ngSubmit)="onSubmit()">
+    <div class="full-width">
+      <label for="fileInput">Select File</label>
+      <input id="fileInput" type="file" (change)="onFileChange($event)" required>
+    </div>
+    <div class="button-container">
+      <button mat-raised-button color="primary" type="submit">
+        Upload
+      </button>
+      <button mat-raised-button color="warn" (click)="deleteAttachement()">
+        Delete
+      </button>
+    </div>
+  </form>
+</div>
+
+<h1 mat-dialog-title>Download</h1>
+<div mat-dialog-content>
+  <div class="button-container">
+    <button mat-raised-button color="primary" (click)="downloadAttachement()">
+      Download
+    </button>
+    <button mat-raised-button mat-dialog-close color="warn">Exit</button>
+  </div>
+</div>

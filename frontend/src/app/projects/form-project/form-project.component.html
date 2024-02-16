@@ -1,0 +1,55 @@
+<h1 mat-dialog-title>{{ data.project?.id ? 'Update Project' : 'Add Project' }}</h1>
+<div mat-dialog-content>
+  <form #projectForm="ngForm" (ngSubmit)="onSubmit(projectForm)">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Title</mat-label>
+      <input matInput name="title" ngModel required [(ngModel)]="data.title">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Details</mat-label>
+      <input matInput name="detail" ngModel required [(ngModel)]="data.detail">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Due Date</mat-label>
+      <input matInput [matDatepicker]="dueDatePicker" name="dueDate" ngModel [(ngModel)]="data.dueDate" required (dateInput)="onDueDateChange($event)">
+      <mat-datepicker-toggle matSuffix [for]="dueDatePicker"></mat-datepicker-toggle>
+      <mat-datepicker #dueDatePicker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Status</mat-label>
+      <mat-select name="status" ngModel required [(ngModel)]="data.status">
+        <mat-option value="Completed">Completed</mat-option>
+        <mat-option value="On Work">On Work</mat-option>
+        <mat-option value="On Hold">On Hold</mat-option>
+        <mat-option value="Canceled">Canceled</mat-option>
+        <mat-option value="Not Started">Not Started</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Priority</mat-label>
+      <mat-select name="priority" ngModel required [(ngModel)]="data.priority">
+        <mat-option value="1">High</mat-option>
+        <mat-option value="2">Medium</mat-option>
+        <mat-option value="3">Low</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Project Client</mat-label>
+      <mat-select name="projectClient" ngModel [(ngModel)]="data.projectClient" [disabled]="data.project?.id">
+        <mat-option *ngFor="let client of data.projectClients" [value]="client">{{ client.name }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+
+
+    <div class="button-container">
+      <button mat-raised-button color="primary" type="submit">{{ data.project?.id ? 'Update' : 'Add' }}</button>
+      <button mat-raised-button mat-dialog-close color="warn" (click)="onNoClick()">Cancel</button>
+    </div>
+  </form>
+</div>

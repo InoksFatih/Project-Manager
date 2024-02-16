@@ -1,0 +1,134 @@
+<h1>Tasks</h1>
+<div class="card">
+  <div class="card-head">All Tasks</div>
+  <div class="card-body">
+    <div class="card-body-buttons">
+      <mat-form-field appearance="outline">
+        <mat-label>Filter Table</mat-label>
+        <input matInput placeholder="" (keyup)="applyFilter($event)">
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" (click)="openTaskDialog()">
+        Add Task
+      </button>
+    </div>
+    <div class="table-container">
+    <mat-table [dataSource]="dataSource" matSort>
+
+      <ng-container matColumnDef="title">
+        <mat-header-cell *matHeaderCellDef mat-sort-header class="mat-column-title">Title</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{element.title}}</mat-cell>
+      </ng-container>
+
+
+      <ng-container matColumnDef="dueDate">
+        <mat-header-cell *matHeaderCellDef mat-sort-header class="mat-column-dueDate">Due Date</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{ element.dueDate | date: 'shortDate' }}</mat-cell>
+      </ng-container>
+
+
+      <ng-container matColumnDef="status">
+        <mat-header-cell *matHeaderCellDef mat-sort-header class="mat-column-status">Status</mat-header-cell>
+        <mat-cell *matCellDef="let element" >
+          <mat-form-field class="status-field mat-form-field-center">
+            <mat-select [(ngModel)]="element.status" (selectionChange)="updateStatus($event.value, element)">
+              <mat-select-trigger [ngStyle]="{ 'color': getStatusColor(element.status) }">
+                {{ this.getStatusValue(element.status) }}
+              </mat-select-trigger>
+              <mat-option *ngFor="let status of listeStatus" [value]="status">
+                {{ this.getStatusValue(status) }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-cell>
+      </ng-container>
+
+
+
+      <ng-container matColumnDef="priority">
+        <mat-header-cell *matHeaderCellDef mat-sort-header class="mat-column-priority">Priority</mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <mat-form-field class="assignPerson-field mat-form-field-center">
+            <mat-select (selectionChange)="updatePriority($event.value, element)" [(ngModel)]="element.priority">
+              <mat-select-trigger [ngStyle]="{ 'color': getPriorityColor(element.priority) }">
+                {{ this.getPriorityValue(element.priority) }}
+              </mat-select-trigger>
+              <mat-option *ngFor="let priority of listePriority" [value]="priority" [ngStyle]="{ 'color': getPriorityColor(priority) }">
+                {{ this.getPriorityValue(priority) }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-cell>
+      </ng-container>
+
+
+      <ng-container matColumnDef="assignPerson">
+        <mat-header-cell *matHeaderCellDef class="mat-column-assignPerson">Assign Person</mat-header-cell>
+        <mat-cell *matCellDef="let task">
+          <mat-form-field class="assignPerson-field mat-form-field-center">
+            <mat-label>{{ task.assignPerson ? task.assignPerson.firstName + ' ' + task.assignPerson.lastName : 'Assign Person' }}</mat-label>
+            <mat-select (selectionChange)="assignPerson($event, task)">
+              <mat-option [value]="null" (click)="removePersonFromTask(task)">None</mat-option>
+              <ng-container *ngFor="let person of persons; let last = last">
+                <mat-option [value]="person">
+                  {{ person.firstName + ' ' + person.lastName }}
+                </mat-option>
+                <mat-divider *ngIf="!last"></mat-divider>
+              </ng-container>
+            </mat-select>
+          </mat-form-field>
+
+        </mat-cell>
+      </ng-container>
+
+
+      <ng-container matColumnDef="subtasks">
+        <mat-header-cell *matHeaderCellDef> SubTasks </mat-header-cell>
+        <mat-cell *matCellDef="let task">
+          <button mat-icon-button color="primary" (click)="redirectToSubtasks(task.id)">
+            <mat-icon>list</mat-icon>
+            <span class="badge" matBadge="{{ task.subtasks?.length || 0 }}" matBadgePosition="above after"></span>
+          </button>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef class="mat-column-actions">Actions</mat-header-cell>
+        <mat-cell *matCellDef="let task">
+          <button mat-icon-button class="blue-button" [matMenuTriggerFor]="taskActionsMenu">
+            <mat-icon class="blue-button">more_vert</mat-icon>
+          </button>
+          <mat-menu #taskActionsMenu="matMenu">
+            <button mat-menu-item class="blue-button" (click)="viewTask(task)">
+              <mat-icon class="blue-button">visibility</mat-icon>
+              <span>View</span>
+            </button>
+            <button mat-menu-item class="green-button" (click)="openTaskDialog(task)">
+              <mat-icon class="green-button">create</mat-icon>
+              <span>Edit</span>
+            </button>
+            <button mat-menu-item class="red-button" (click)="deleteTask(task.id)">
+              <mat-icon class="red-button">delete_outline</mat-icon>
+              <span>Delete</span>
+            </button>
+            <button mat-menu-item class="yellow-button" (click)="openUploadDialog(task)">
+              <mat-icon class="yellow-button">cloud_upload</mat-icon>
+              <span>Upload</span>
+            </button>
+          </mat-menu>
+        </mat-cell>
+      </ng-container>
+
+
+
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+    <div *ngIf="dataSource.data.length === 0" class="empty-table-message">
+      No tasks available.
+    </div>
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true" aria-label="Select page of tasks"></mat-paginator>
+  </div>
+</div>
+</div>
