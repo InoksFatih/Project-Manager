@@ -61,8 +61,8 @@ public class TaskService {
             Task task = taskData.get();
             if (task.getAttachement() != null) {
                 try {
-                    Attachement attachment = attachementService.getAttachement(task.getAttachement().getId());
-                    task.setAttachement(attachment);
+                    Attachement attachement = attachementService.getAttachement(task.getAttachement().getId());
+                    task.setAttachement(attachement);
                 } catch (Exception e) {
                     return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
                 }
@@ -81,8 +81,8 @@ public class TaskService {
         for (Task task : taskList) {
             if (task.getAttachement() != null) {
                 try {
-                    Attachement attachment = attachementService.getAttachement(task.getAttachement().getId());
-                    task.setAttachement(attachment);
+                    Attachement attachement = attachementService.getAttachement(task.getAttachement().getId());
+                    task.setAttachement(attachement);
                 } catch (Exception e) {
                     return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
                 }
@@ -91,6 +91,7 @@ public class TaskService {
         return new ResponseEntity<>(taskList, HttpStatus.OK);
     }
 
+
     public ResponseEntity<List<Task>> getTasksByProject(Long projectId) {
         Optional<Project> projectOptional = projectRepo.findById(projectId);
         if (projectOptional.isPresent()) {
@@ -98,8 +99,8 @@ public class TaskService {
             for (Task task : tasks) {
                 if (task.getAttachement() != null) {
                     try {
-                        Attachement attachment = attachementService.getAttachement(task.getAttachement().getId());
-                        task.setAttachement(attachment);
+                        Attachement attachement = attachementService.getAttachement(task.getAttachement().getId());
+                        task.setAttachement(attachement);
                     } catch (Exception e) {
                         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
                     }

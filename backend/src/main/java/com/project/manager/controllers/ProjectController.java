@@ -29,8 +29,8 @@ public class ProjectController {
     }
 
     @GetMapping("/getAllProjects")
-    public ResponseEntity<List<ProjectDTO>> getAllProjects() {
-        ResponseEntity<List<ProjectDTO>> allProjects = projectService.getAllProjects();
+    public ResponseEntity<List<Project>> getAllProjects() {
+        ResponseEntity<List<Project>> allProjects = projectService.getAllProjects();
         return allProjects;
     }
 

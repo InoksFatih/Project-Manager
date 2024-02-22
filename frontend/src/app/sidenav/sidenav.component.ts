@@ -4,7 +4,7 @@ import { navbarData } from "./nav-data";
 import { EventEmitter } from "@angular/core";
 import {animate, keyframes, style, transition, trigger} from "@angular/animations";
 import {INavbarData} from "./helper";
-import { CalendarComponent } from '../calendar/calendar.component';
+
 
 interface SideNavToggle {
   screenWidth: number;
@@ -44,8 +44,7 @@ interface SideNavToggle {
 })
 export class SidenavComponent implements OnInit {
   @Output() onToggleSidenav: EventEmitter<SideNavToggle> = new EventEmitter();
-  @ViewChild(CalendarComponent, { static: true }) private calendarComponent!: CalendarComponent;
-  @ViewChild('fullCalendar') fullCalendar: any;
+
 
   collapsed = false;
   screenWidth = 0;
@@ -90,27 +89,4 @@ export class SidenavComponent implements OnInit {
     }
     item.expanded = !item.expanded
   }
-  handleSidenavClick(): void {
-    if (this.fullCalendar) {
-      // Log to check if fullCalendar is defined
-      console.log("FullCalendar Component exists:", this.fullCalendar);
-
-      // Check if the FullCalendar component is visible before refreshing
-      if (this.collapsed) {
-        // Toggle the sidebar to open it
-        this.toggleCollapse();
-
-        // Set a timeout to ensure the sidebar animation completes before refreshing
-        setTimeout(() => {
-          // Attempting to call the refreshCalendar method
-          this.fullCalendar.refreshCalendar();
-          console.log("Refreshed FullCalendar");
-        }, 500); // Adjust the timeout value as needed
-      }
-    } else {
-      console.error("FullCalendar Component not found or not initialized");
-    }
-  }
-
-
 }

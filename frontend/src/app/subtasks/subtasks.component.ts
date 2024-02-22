@@ -164,12 +164,12 @@ export class SubtasksComponent implements OnInit {
     );
   }
   viewSubtask(subtask: Subtask) {
-    console.log('Received task:', subtask); // Log the received task object
-    console.log('Task ID:', subtask.id); // Log the task ID property
+    console.log('Received task:', subtask);
+    console.log('Task ID:', subtask.id);
 
     const dialogRef = this.dialog.open(ViewSubtaskComponent, {
       width: '1000px',
-      data: { subtask: subtask } // Pass the entire task object as data
+      data: { subtask: subtask }
     });
   }
   updateStatus(newStatus: Status, subtask: Subtask): void {

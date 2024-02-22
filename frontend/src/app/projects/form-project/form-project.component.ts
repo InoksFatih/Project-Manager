@@ -4,6 +4,8 @@ import { NgForm } from '@angular/forms';
 import { Project } from '../../models/projectMod';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ProjectService } from '../project.service';
+import {Priority} from "../../models/priorityMod";
+import {Status} from "../../models/statusMod";
 
 @Component({
   selector: 'app-form-project',
@@ -14,6 +16,8 @@ export class FormProjectComponent implements OnInit {
   selectedDueDate!: Date | null;
   projectClients: any[] = [];
   disabled: boolean = false;
+  public listePriority: any[] = [] ;
+  public listeStatus: any[] = [] ;
 
   constructor(
     public dialogRef: MatDialogRef<FormProjectComponent>,
@@ -23,9 +27,14 @@ export class FormProjectComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.selectedDueDate = this.data.project?.dueDate || null;
+    this.selectedDueDate = this.data.dueDate || null;
     this.getAllClients();
-    this.disabled = !!this.data.project?.id;
+    this.disabled = !!this.data.id;
+    this.listePriority = Object.keys(Priority);
+    this.listeStatus = Object.keys(Status);
+    if (!this.data.id) {
+      this.data.status = Status.NOTSTARTED;
+    }
   }
 
   getAllClients(): void {
@@ -36,6 +45,7 @@ export class FormProjectComponent implements OnInit {
 
   onNoClick(): void {
     this.dialogRef.close();
+    window.location.reload();
   }
 
   onDueDateChange(event: any): void {
@@ -46,17 +56,24 @@ export class FormProjectComponent implements OnInit {
     if (projectForm.valid && projectForm.value) {
       const selectedDueDate = projectForm.value.dueDate;
 
-      if (!this.data.project?.id && this.isDateTodayOrPast(selectedDueDate)) {
+      if (!this.data.id && this.isDateTodayOrPast(selectedDueDate)) {
         this.showSnackbar('Due date must be in the future.', 'error-notification');
         return;
       }
 
+      let status: Status;
+      if (!this.data.id) {
+        status = Status.NOTSTARTED;
+      } else {
+        status = this.data.status;
+      }
+
       const project: Project = {
-        id: this.data.project?.id,
+        id: this.data.id,
         title: projectForm.value.title,
         detail: projectForm.value.detail,
         dueDate: selectedDueDate,
-        status: projectForm.value.status,
+        status: status,
         priority: projectForm.value.priority,
         projectClient: projectForm.value.projectClient,
         realDaysConsumed: projectForm.value.realDaysConsumed,
@@ -93,5 +110,53 @@ export class FormProjectComponent implements OnInit {
   private isDateTodayOrPast(date: Date): boolean {
     const today = new Date();
     return date <= today;
+  }
+  getPriorityColor(priority: string): string {
+    switch (priority) {
+      case 'IMPORTANT':
+        return 'red';
+      case 'ESSENTIAL':
+        return 'blue';
+      case 'SECONDAIRE':
+        return 'green';
+      default:
+        return '';
+    }
+  }
+  getStatusColor(status: string): string {
+    switch (status) {
+      case 'Completed':
+        return 'green';
+      case 'Pending':
+        return '#b9ad2a';
+      case 'Not Started':
+        return 'grey';
+      default:
+        return '';
+    }
+  }
+  getPriorityValue(priority: any) {
+    switch (priority) {
+      case "ESSENTIAL":
+        return 'Essential';
+      case "IMPORTANT":
+        return 'Important';
+      case "SECONDAIRE":
+        return 'Secondaire';
+      default:
+        return '';
+    }
+  };
+  getStatusValue(status: any) {
+    switch (status) {
+      case "COMPLETED":
+        return 'Completed';
+      case "PENDING":
+        return 'Pending';
+      case "NOTSTARTED":
+        return 'Not Started';
+      default:
+        return '';
+    }
   }
 }

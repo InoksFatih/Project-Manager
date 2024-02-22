@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @RestController
@@ -59,8 +61,8 @@ public class AttachementController {
                         attachement.getFileName(),
                         downloadUrl,
                         file.getContentType(),
-                        Long.toString(file.getSize()),
-                        formattedUploadDate
+                        formattedUploadDate,
+                        Long.toString(file.getSize())
                 );
 
                 return ResponseEntity.ok().body(attachementDTO);
@@ -72,7 +74,70 @@ public class AttachementController {
         }
     }
 
+    @GetMapping("/getAllAttachements")
+    public ResponseEntity<List<AttachementDTO>> getAllAttachements() {
+        try {
+            List<Attachement> attachements = attachementService.getAllAttachements();
 
+            List<AttachementDTO> attachementDTOs = new ArrayList<>();
+            for (Attachement attachement : attachements) {
+                String downloadUrl = generateDownloadUrl(attachement.getId());
+
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                String formattedUploadDate = attachement.getUploadDate()
+                        .toInstant()
+                        .atZone(ZoneId.systemDefault())
+                        .format(formatter);
+
+                AttachementDTO attachementDTO = new AttachementDTO(
+                        attachement.getId(),
+                        attachement.getFileName(),
+                        downloadUrl,
+                        attachement.getFileType(),
+                        Long.toString(Long.parseLong(attachement.getFileSize())),
+                        formattedUploadDate
+                );
+                attachementDTOs.add(attachementDTO);
+            }
+
+            return ResponseEntity.ok().body(attachementDTOs);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+    @GetMapping("/getAttachementByTask/{taskId}")
+    public ResponseEntity<AttachementDTO> getAttachementByTask(@PathVariable Long taskId) {
+        try {
+
+            Attachement attachement = attachementService.getAttachementByTask(taskId);
+
+            if (attachement == null) {
+                return ResponseEntity.notFound().build();
+            }
+
+
+            String downloadUrl = generateDownloadUrl(attachement.getId());
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            String formattedUploadDate = attachement.getUploadDate()
+                    .toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .format(formatter);
+
+            AttachementDTO attachementDTO = new AttachementDTO(
+                    attachement.getId(),
+                    attachement.getFileName(),
+                    downloadUrl,
+                    attachement.getFileType(),
+                    formattedUploadDate,
+                    Long.toString(Long.parseLong(attachement.getFileSize()))
+            );
+
+            return ResponseEntity.ok().body(attachementDTO);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
 
     @GetMapping("/downloadFile/{fileId}")
     public ResponseEntity<Resource> downloadFile(@PathVariable Long fileId) {
@@ -81,22 +146,23 @@ public class AttachementController {
 
             return ResponseEntity.ok()
                     .contentType(MediaType.parseMediaType(attachement.getFileType()))
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + attachement.getFileName() + "\"")
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachement; filename=\"" + attachement.getFileName() + "\"")
                     .body(new ByteArrayResource(attachement.getData()));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
-    @DeleteMapping("/deleteFile/{fileId}")
-    public ResponseEntity<String> deleteFile(@PathVariable Long fileId) {
+    @DeleteMapping("/deleteAttachement/{taskId}")
+    public ResponseEntity<String> deleteAttachement(@PathVariable Long taskId) {
         try {
-            attachementService.deleteAttachement(fileId);
-            return ResponseEntity.ok().body("Attachment deleted successfully");
+            attachementService.deleteAttachementByTaskId(taskId);
+            return ResponseEntity.ok().body("Attachement deleted successfully");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting attachment: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting attachement: " + e.getMessage());
         }
     }
+
 
     @PutMapping("/updateFile/{fileId}")
     public ResponseEntity<AttachementDTO> updateFile(@PathVariable Long fileId, @RequestParam("file") MultipartFile file, @RequestParam("taskId") Long taskId) {
@@ -123,8 +189,8 @@ public class AttachementController {
                         updatedAttachement.getFileName(),
                         downloadUrl,
                         file.getContentType(),
-                        Long.toString(file.getSize()),
-                        formattedUploadDate
+                        formattedUploadDate,
+                        Long.toString(file.getSize())
                 );
 
                 return ResponseEntity.ok().body(updatedAttachementDTO);
@@ -143,6 +209,5 @@ public class AttachementController {
                 .path(fileId.toString())
                 .toUriString();
     }
-
 
 }

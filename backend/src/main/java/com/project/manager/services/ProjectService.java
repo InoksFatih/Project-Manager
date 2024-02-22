@@ -61,38 +61,13 @@ public class ProjectService {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    public ResponseEntity<List<ProjectDTO>> getAllProjects() {
+    public ResponseEntity<List<Project>> getAllProjects() {
         try {
-            List<Project> projectList = projectRepo.findAll();
-            List<ProjectDTO> projectDTOList = new ArrayList<>();
-
-            for (Project project : projectList) {
-                ProjectDTO projectDTO = new ProjectDTO();
-                projectDTO.setId(project.getId());
-                projectDTO.setTitle(project.getTitle());
-                projectDTO.setDetail(project.getDetail());
-                projectDTO.setDueDate(project.getDueDate());
-                projectDTO.setStatus(String.valueOf(project.getStatus()));
-                projectDTO.setPriority(String.valueOf(project.getPriority()));
-                ProjectClient projectClient = project.getProjectClient();
-                ProjectClientDTO projectClientDTO = new ProjectClientDTO();
-                if (projectClient != null) {
-                    projectClientDTO.setName(projectClient.getName());
-                    projectClientDTO.setDescription(projectClient.getDescription());
-                }
-
-                projectDTO.setProjectClient(projectClientDTO);
-                projectDTO.setPlannedDays(projectDTO.getPlannedDays());
-                projectDTO.setRealDaysConsumed(projectDTO.getRealDaysConsumed());
-                projectDTOList.add(projectDTO);
-            }
-
-            if (projectDTOList.isEmpty()) {
+            List<Project> projects = new ArrayList<>(projectRepo.findAll());
+            if (projects.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
-
-            return new ResponseEntity<>(projectDTOList, HttpStatus.OK);
-
+            return new ResponseEntity<>(projects, HttpStatus.OK);
         } catch (Exception ex) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

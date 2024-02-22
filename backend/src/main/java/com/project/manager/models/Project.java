@@ -26,8 +26,8 @@ public class Project implements Serializable {
     private Status status;
     @Enumerated(EnumType.STRING)
     private Priority priority;
-    private double realDaysConsumed;
-    private double plannedDays;
+    private String realDaysConsumed;
+    private String plannedDays;
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
     @JsonIgnore
     private Collection<Task> tasks;

@@ -42,12 +42,10 @@ public class Task implements Serializable {
     @JsonIgnore
     private Collection<Subtask> subtasks;
 
-    @OneToOne(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
-    @JoinColumn(name = "attachement_id")
+    @OneToOne(mappedBy = "task", cascade = CascadeType.ALL)
     private Attachement attachement;
-
-
+    @JsonIgnore
+    public byte[] getData() {
+        return this.attachement != null ? this.attachement.getData() : null;
+    }
 }
-
-

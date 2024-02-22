@@ -1,11 +1,6 @@
 package com.project.manager.dto;
 
-
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import lombok.*;
-
 
 @Getter
 @Setter
@@ -20,9 +15,10 @@ public class AttachementDTO {
     private String uploadDate;
     private String fileSize;
 
-    public AttachementDTO(String fileName, String fileType, long fileSize, String uploadDate) {
+    public AttachementDTO(Long id, String fileName, String downloadUrl, String fileType, long fileSize, String uploadDate) {
+        this.id = id;
         this.fileName = fileName;
-        this.downloadUrl = generateDownloadUrl();
+        this.downloadUrl = downloadUrl;
         this.fileType = fileType;
         this.uploadDate = uploadDate;
         this.fileSize = formatFileSize(fileSize);
@@ -37,8 +33,8 @@ public class AttachementDTO {
             return (sizeInBytes / (1024 * 1024)) + " MB";
         }
     }
+
     private String generateDownloadUrl() {
-        return "http://localhost:8080/download/" + this.id;
+        return "http://localhost:8080/downloadFile/" + this.id;
     }
 }
-

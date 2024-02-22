@@ -19,6 +19,7 @@ import { AttachementService } from "../services/attachement.service";
 import {ViewTaskComponent} from "./view-task/view-task.component";
 import {Priority} from "../models/priorityMod";
 import {Status} from "../models/statusMod";
+import { Attachement } from '../models/attachementModel';
 
 @Component({
   selector: 'app-tasks',
@@ -162,18 +163,44 @@ export class TasksComponent implements OnInit, OnDestroy {
       }
     );
   }
+  isDialogOpen: boolean = false;
+
   openUploadDialog(task: Task): void {
-    const dialogRef = this.dialog.open(UploadComponent, {
-      width: '600px',
-      data: { taskId: task.id }
-    });
-  console.log("Task id is : " + task);
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.refreshTasks();
-      }
-    });
+    if (!this.isDialogOpen) {
+      this.isDialogOpen = true;
+      this.attachementService.getAttachementByTask(task.id!).subscribe(
+        (attachement: Attachement) => {
+          const dialogRef = this.dialog.open(UploadComponent, {
+            width: '600px',
+            data: { task: task, attachement: attachement }
+          });
+
+          dialogRef.afterClosed().subscribe(result => {
+            this.isDialogOpen = false;
+            if (result) {
+              // You can perform any action here after the dialog is closed, such as refreshing tasks
+              this.refreshTasks();
+            }
+          });
+        },
+        (error) => {
+          const dialogRef = this.dialog.open(UploadComponent, {
+            width: '600px',
+            data: { task: task }
+          });
+
+          dialogRef.afterClosed().subscribe(result => {
+            this.isDialogOpen = false;
+            if (result) {
+              this.refreshTasks();
+            }
+          });
+        }
+      );
+    }
   }
+
+
 
   protected removePersonFromTask(task: Task): void {
     if (!task || !task.assignPerson) {

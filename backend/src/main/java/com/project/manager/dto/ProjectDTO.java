@@ -25,13 +25,19 @@ public class ProjectDTO {
     private ProjectClientDTO projectClient;
     private String status;
     private String priority;
-    private double realDaysConsumed;
-    private double plannedDays;
+    private String realDaysConsumed;
+    private String plannedDays;
+
     public Status getStatusEnum() {
-        return Status.valueOfLabel(status);
+        return Status.valueOfLabel(normalizeLabel(status));
     }
 
     public Priority getPriorityEnum() {
         return Priority.valueOfLabel(priority);
+    }
+
+    private String normalizeLabel(String label) {
+        // Normalize the label by converting it to lowercase and removing spaces
+        return label.toLowerCase().replaceAll("\\s+", "");
     }
 }

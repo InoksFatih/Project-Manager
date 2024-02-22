@@ -1,4 +1,4 @@
-<h1 mat-dialog-title>{{ data.project?.id ? 'Update Project' : 'Add Project' }}</h1>
+<h1 mat-dialog-title>{{ data.id ? 'Update Project' : 'Add Project' }}</h1>
 <div mat-dialog-content>
   <form #projectForm="ngForm" (ngSubmit)="onSubmit(projectForm)">
     <mat-form-field appearance="outline" class="full-width">
@@ -6,10 +6,6 @@
       <input matInput name="title" ngModel required [(ngModel)]="data.title">
     </mat-form-field>
 
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Details</mat-label>
-      <input matInput name="detail" ngModel required [(ngModel)]="data.detail">
-    </mat-form-field>
 
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Due Date</mat-label>
@@ -19,36 +15,52 @@
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Status</mat-label>
-      <mat-select name="status" ngModel required [(ngModel)]="data.status">
-        <mat-option value="Completed">Completed</mat-option>
-        <mat-option value="On Work">On Work</mat-option>
-        <mat-option value="On Hold">On Hold</mat-option>
-        <mat-option value="Canceled">Canceled</mat-option>
-        <mat-option value="Not Started">Not Started</mat-option>
+      <mat-label>Priority</mat-label>
+      <mat-select name="priority" ngModel required [(ngModel)]="data.priority">
+        <mat-option *ngFor="let priority of listePriority" [value]="priority" [ngStyle]="{ 'color': getPriorityColor(priority) } ">
+          {{ this.getPriorityValue(priority) }}
+        </mat-option>
       </mat-select>
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Priority</mat-label>
-      <mat-select name="priority" ngModel required [(ngModel)]="data.priority">
-        <mat-option value="1">High</mat-option>
-        <mat-option value="2">Medium</mat-option>
-        <mat-option value="3">Low</mat-option>
+      <mat-label>Status</mat-label>
+      <mat-select name="status" ngModel required [(ngModel)]="data.status" [disabled]="!data.id">
+        <mat-option *ngFor="let status of listeStatus" [value]="status" [ngStyle]="{ 'color': getStatusColor(status) }">
+          {{ this.getStatusValue(status) }}
+        </mat-option>
       </mat-select>
     </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Planned Days</mat-label>
+      <input matInput type="number" step="any" name="plannedDays" ngModel [(ngModel)]="data.plannedDays" min="0" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Real Days Consumed</mat-label>
+      <input matInput type="number" step="any" name="realDaysConsumed" ngModel [(ngModel)]="data.realDaysConsumed" min="0"
+             [disabled]="!data.id" required>
+    </mat-form-field>
+
 
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Project Client</mat-label>
-      <mat-select name="projectClient" ngModel [(ngModel)]="data.projectClient" [disabled]="data.project?.id">
-        <mat-option *ngFor="let client of data.projectClients" [value]="client">{{ client.name }}</mat-option>
+      <mat-select name="projectClient" [(ngModel)]="data.projectClient" [disabled]="data.id">
+        <mat-option *ngFor="let client of projectClients" [value]="client">{{ client.name }}</mat-option>
       </mat-select>
     </mat-form-field>
 
 
+    <div class="textarea-container">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Details</mat-label>
+        <textarea matInput name="detail" ngModel required [(ngModel)]="data.detail" rows="5" class="resizable-textarea"></textarea>
+      </mat-form-field>
+    </div>
 
     <div class="button-container">
-      <button mat-raised-button color="primary" type="submit">{{ data.project?.id ? 'Update' : 'Add' }}</button>
+      <button mat-raised-button color="primary" type="submit">{{ data.id ? 'Update' : 'Add' }}</button>
       <button mat-raised-button mat-dialog-close color="warn" (click)="onNoClick()">Cancel</button>
     </div>
   </form>

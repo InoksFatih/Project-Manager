@@ -1,10 +1,12 @@
 package com.project.manager.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
 import java.util.Date;
+
 @Entity
 @Getter
 @Setter
@@ -18,17 +20,20 @@ public class Attachement implements Serializable {
 
     @Column(name = "download_url", nullable = false)
     private String downloadUrl;
+
     private Date uploadDate;
     private String fileName;
     private String fileType;
-    private Long fileSize;
+    private String fileSize;
 
     @Lob
     @Column(columnDefinition = "LONGBLOB")
+    @JsonIgnore
     private byte[] data;
 
     @OneToOne
     @JoinColumn(name = "task_id")
+    @JsonIgnore
     private Task task;
 
     public Attachement(String fileName, String fileType, byte[] data) {
@@ -39,6 +44,6 @@ public class Attachement implements Serializable {
     }
 
     private String generateDownloadUrl() {
-        return "http://localhost:8080/download/" + this.id;
+        return "http://localhost:8080/downloadFile/" + this.id;
     }
 }

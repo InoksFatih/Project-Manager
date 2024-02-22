@@ -23,15 +23,13 @@ import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import { MatDialogClose, MatDialogContent, MatDialogTitle } from '@angular/material/dialog';
+import {MatDialogActions, MatDialogClose, MatDialogContent, MatDialogTitle} from '@angular/material/dialog';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
-import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormProjectComponent } from './projects/form-project/form-project.component';
 import { FormTaskComponent } from './tasks/form-task/form-task.component';
 import { FormSubtaskComponent } from './subtasks/form-subtask/form-subtask.component';
-import { FullCalendarModule } from '@fullcalendar/angular';
 import { CalendarModule, DateAdapter, MOMENT } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/moment';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
@@ -47,6 +45,8 @@ import { ViewTaskComponent } from './tasks/view-task/view-task.component';
 import { ViewProjectComponent } from './projects/view-project/view-project.component';
 import { ViewSubtaskComponent } from './subtasks/view-subtask/view-subtask.component';
 import {MatDivider} from "@angular/material/divider";
+import {ScheduleModule ,DayService, WeekService, WorkWeekService, MonthService, AgendaService, MonthAgendaService, TimelineViewsService, TimelineMonthService} from "@syncfusion/ej2-angular-schedule";
+import {FullCalendarModule} from "@fullcalendar/angular";
 
 
 
@@ -90,7 +90,6 @@ import {MatDivider} from "@angular/material/divider";
         MatDatepickerModule,
         MatNativeDateModule,
         MatSelectModule,
-        FullCalendarModule,
         MatTableModule,
         MatPaginatorModule,
         MatSortModule,
@@ -109,12 +108,17 @@ import {MatDivider} from "@angular/material/divider";
         MatBadge,
         ReactiveFormsModule,
         MatDivider,
+        MatDialogActions,
+        ScheduleModule,
+        FullCalendarModule,
+
     ],
   providers: [
     provideClientHydration(),
     { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
     { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
     { provide: MOMENT, useValue: moment },
+    DayService, WeekService, WorkWeekService, MonthService, AgendaService, MonthAgendaService, TimelineViewsService, TimelineMonthService,
   ],
   bootstrap: [AppComponent],
 })

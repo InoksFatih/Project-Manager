@@ -11,7 +11,7 @@ export class Project {
   status!: Status;
   priority!: Priority;
   projectClient?: ProjectClient;
-  realDaysConsumed!: number;
-  plannedDays!: number ;
+  realDaysConsumed!: string;
+  plannedDays!: string;
   tasks?: Task[];
 }

@@ -1,5 +1,5 @@
-// calendar.component.ts
-import { Component, ChangeDetectorRef, ChangeDetectionStrategy, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, ChangeDetectorRef, ChangeDetectionStrategy, ElementRef, ViewChild, AfterViewInit, PLATFORM_ID, Inject } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { CalendarOptions, EventClickArg } from '@fullcalendar/core';
 import interactionPlugin from '@fullcalendar/interaction';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -45,8 +45,13 @@ export class CalendarComponent implements AfterViewInit {
   constructor(
     private changeDetector: ChangeDetectorRef,
     private projectService: ProjectService,
-  ) {
-    this.fetchDueDates();
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {}
+
+  ngAfterViewInit(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      this.fetchDueDates();
+    }
   }
 
   fetchDueDates() {
@@ -68,13 +73,7 @@ export class CalendarComponent implements AfterViewInit {
     );
   }
 
-  ngAfterViewInit(): void {
-    // Access fullCalendar here
-    console.log(this.fullCalendar.nativeElement);
-  }
-
   handleEventClick(clickInfo: EventClickArg) {
-    // Handle event click logic if needed
     console.log('Event clicked:', clickInfo.event);
   }
 

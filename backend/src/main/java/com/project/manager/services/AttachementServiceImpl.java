@@ -7,12 +7,16 @@ import com.project.manager.repo.TaskRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
+
+@CrossOrigin("*")
 
 @Service
 public class AttachementServiceImpl implements AttachementService {
@@ -44,7 +48,7 @@ public class AttachementServiceImpl implements AttachementService {
                     file.getBytes()
             );
             attachement.setUploadDate(new Date());
-            attachement.setFileSize(file.getSize());
+            attachement.setFileSize(String.valueOf(file.getSize()));
             attachement.setTask(task);
 
             attachement = attachementRepo.save(attachement);
@@ -60,9 +64,6 @@ public class AttachementServiceImpl implements AttachementService {
             throw new Exception("Could not save File: " + fileName);
         }
     }
-
-
-
 
     @Override
     public Attachement getAttachement(Long fileId) throws Exception {
@@ -86,7 +87,7 @@ public class AttachementServiceImpl implements AttachementService {
             existingAttachement.setFileType(file.getContentType());
             existingAttachement.setData(file.getBytes());
             existingAttachement.setUploadDate(new Date());
-            existingAttachement.setFileSize(file.getSize());
+            existingAttachement.setFileSize(String.valueOf(file.getSize()));
 
             attachementRepo.save(existingAttachement);
 
@@ -96,28 +97,44 @@ public class AttachementServiceImpl implements AttachementService {
         }
     }
 
-    @Override
-    public void deleteAttachement(Long fileId) throws Exception {
-        try {
-            Attachement attachement = attachementRepo.findById(fileId)
-                    .orElseThrow(() -> new Exception("Attachment not found with ID: " + fileId));
+   @Override
+   public List<Attachement> getAllAttachements() throws Exception {
+       try {
+           return attachementRepo.findAll();
+       } catch (Exception e) {
+           throw new Exception("Error retrieving attachements: " + e.getMessage());
+       }
+   }
 
-            // Disassociate the attachment from the task
+    @Override
+    public Attachement getAttachementByTask(Long taskId) throws Exception {
+        Task task = taskRepo.findById(taskId)
+                .orElseThrow(() -> new Exception("Task not found with ID: " + taskId));
+
+        return task.getAttachement();
+    }
+
+    @Override
+    public void deleteAttachementByTaskId(Long taskId) throws Exception {
+        try {
+            Attachement attachement = attachementRepo.findByTaskId(taskId);
+            if (attachement == null) {
+                throw new Exception("Attachement not found for Task ID: " + taskId);
+            }
+
             Task task = attachement.getTask();
             if (task != null) {
                 task.setAttachement(null);
                 taskRepo.save(task);
             }
 
-            // Now delete the attachment
-            attachementRepo.deleteById(fileId);
+            attachementRepo.delete(attachement);
         } catch (Exception e) {
-            throw new Exception("Error deleting attachment: " + e.getMessage());
+            throw new Exception("Error deleting attachement: " + e.getMessage());
         }
     }
 
-
     private String generateDownloadUrl(Long attachementId) {
-        return "http://localhost:8080/download/" + attachementId;
+        return "http://localhost:8080/downloadFile/" + attachementId;
     }
 }

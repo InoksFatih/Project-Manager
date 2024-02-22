@@ -8,6 +8,8 @@
       <p><strong>Status:</strong> {{ getStatusValue(selectedTask.status) }}</p>
       <p><strong>Priority:</strong> {{ getPriorityValue(selectedTask.priority) }}</p>
       <p *ngIf="selectedTask.assignPerson"><strong>Assign Person:</strong> {{ selectedTask.assignPerson.firstName }} {{ selectedTask.assignPerson.lastName }}</p>
+      <p><strong>Planned Days:</strong> {{ selectedTask.plannedDays }}</p>
+      <p><strong>Real Days Consumed:</strong> {{ selectedTask.realDaysConsumed }}</p>
       <div>
         <strong>Details:</strong>
         <textarea rows="10" cols="50" [(ngModel)]="selectedTask.detail" style="resize: vertical;" readonly (input)="onTextareaInput()"></textarea>

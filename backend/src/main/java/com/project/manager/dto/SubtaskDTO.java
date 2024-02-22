@@ -35,5 +35,8 @@ public class SubtaskDTO {
     public Priority getPriorityEnum() {
         return Priority.valueOfLabel(priority);
     }
-
+    private String normalizeLabel(String label) {
+        // Normalize the label by converting it to lowercase and removing spaces
+        return label.toLowerCase().replaceAll("\\s+", "");
+    }
 }

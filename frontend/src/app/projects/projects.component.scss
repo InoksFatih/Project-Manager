@@ -58,10 +58,9 @@ mat-cell {
   display: flex;
   justify-content: center;
   margin-top: 11px;
-  margin-bottom: -11px;
+  margin-bottom: 11px;
 }
 
-/* Define custom button colors */
 .green-button {
   color: green;
 }
@@ -122,8 +121,8 @@ mat-cell {
 .mat-column-status {
   word-wrap: break-word !important;
   white-space: unset !important;
-  flex: 0 0 15% !important;
-  width: 15% !important;
+  flex: 0 0 20% !important;
+  width: 20% !important;
   overflow-wrap: break-word;
   word-break: break-word;
   -ms-hyphens: auto;
@@ -161,8 +160,8 @@ mat-cell {
 .mat-column-projectClient {
   word-wrap: break-word !important;
   white-space: unset !important;
-  flex: 0 0 20% !important;
-  width: 20% !important;
+  flex: 0 0 15% !important;
+  width: 15% !important;
   overflow-wrap: break-word;
   word-break: break-word;
   -ms-hyphens: auto;

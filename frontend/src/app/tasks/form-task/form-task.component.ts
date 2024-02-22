@@ -71,7 +71,7 @@ export class FormTaskComponent implements OnInit {
           projectId: this.projectId,
           id: this.data.id,
           plannedDays: taskForm.value.plannedDays,
-          realDaysConsumed: taskForm.value.plannedDays,
+          realDaysConsumed: taskForm.value.realDaysConsumed,
         };
 
         this.updateOrAddTask(task);

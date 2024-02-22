@@ -1,4 +1,3 @@
-<h1>Tasks</h1>
 <div class="card">
   <div class="card-head">All Tasks</div>
   <div class="card-body">
@@ -20,12 +19,10 @@
         <mat-cell *matCellDef="let element">{{element.title}}</mat-cell>
       </ng-container>
 
-
       <ng-container matColumnDef="dueDate">
         <mat-header-cell *matHeaderCellDef mat-sort-header class="mat-column-dueDate">Due Date</mat-header-cell>
         <mat-cell *matCellDef="let element">{{ element.dueDate | date: 'shortDate' }}</mat-cell>
       </ng-container>
-
 
       <ng-container matColumnDef="status">
         <mat-header-cell *matHeaderCellDef mat-sort-header class="mat-column-status">Status</mat-header-cell>
@@ -43,8 +40,6 @@
         </mat-cell>
       </ng-container>
 
-
-
       <ng-container matColumnDef="priority">
         <mat-header-cell *matHeaderCellDef mat-sort-header class="mat-column-priority">Priority</mat-header-cell>
         <mat-cell *matCellDef="let element">
@@ -61,7 +56,6 @@
         </mat-cell>
       </ng-container>
 
-
       <ng-container matColumnDef="assignPerson">
         <mat-header-cell *matHeaderCellDef class="mat-column-assignPerson">Assign Person</mat-header-cell>
         <mat-cell *matCellDef="let task">
@@ -77,10 +71,8 @@
               </ng-container>
             </mat-select>
           </mat-form-field>
-
         </mat-cell>
       </ng-container>
-
 
       <ng-container matColumnDef="subtasks">
         <mat-header-cell *matHeaderCellDef> SubTasks </mat-header-cell>
@@ -118,9 +110,6 @@
           </mat-menu>
         </mat-cell>
       </ng-container>
-
-
-
 
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
       <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>

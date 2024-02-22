@@ -9,4 +9,5 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 @RepositoryRestResource
 @CrossOrigin("*")
 public interface AttachementRepo extends JpaRepository<Attachement, Long> {
+    Attachement findByTaskId(Long taskId);
 }
