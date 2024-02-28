@@ -1,0 +1,78 @@
+
+<div class="card">
+  <div class="card-head">Les tâches associée aux personnes</div>
+  <div class="card-body">
+    <div class="card-body-buttons">
+      <mat-form-field appearance="outline">
+        <mat-label>Filtrer le tableau</mat-label>
+        <input matInput placeholder="" (keyup)="applyFilter($event)">
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>{{ selectedPerson ? selectedPerson.firstName + ' ' + selectedPerson.lastName : 'Sélectionnez une personne' }}</mat-label>
+        <mat-select [(value)]="selectedPerson" (selectionChange)="onPersonSelectionChange($event.value)">
+          <mat-option [value]="null">Aucun</mat-option>
+          <mat-option *ngFor="let person of persons" [value]="person">{{ person.firstName + ' ' + person.lastName }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div>
+        <mat-form-field>
+          <mat-label>{{ selectedProject ? selectedProject.title : 'Sélectionnez un projet' }}</mat-label>
+          <mat-select [(value)]="selectedProject" [disabled]="!selectedPerson" (selectionChange)="onProjectSelectionChange($event.value)">
+            <mat-option [value]="null">Aucun</mat-option>
+            <mat-option *ngFor="let project of projects" [value]="project">{{ project.title }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+    <div *ngIf="selectedPerson && selectedProject">
+      <div class="table-container">
+        <mat-table [dataSource]="dataSource" matSort>
+          <ng-container matColumnDef="title">
+            <mat-header-cell *matHeaderCellDef mat-sort-header class="mat-column-title">Titre</mat-header-cell>
+            <mat-cell *matCellDef="let element">{{element.title}}</mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="endDate">
+            <mat-header-cell *matHeaderCellDef mat-sort-header class="mat-column-dueDate">Date de fin</mat-header-cell>
+            <mat-cell *matCellDef="let element">{{ element.endDate | date: 'shortDate' }}</mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="status">
+            <mat-header-cell *matHeaderCellDef mat-sort-header class="mat-column-status">Statut</mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              {{ getStatusValue(element.status) }}
+            </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="priority">
+            <mat-header-cell *matHeaderCellDef mat-sort-header class="mat-column-priority">Priorité</mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              {{ getPriorityValue(element.priority) }}
+            </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="subtasks">
+            <mat-header-cell *matHeaderCellDef> Sous-tâches </mat-header-cell>
+            <mat-cell *matCellDef="let task">
+              <button mat-icon-button color="primary" (click)="redirectToSubtasks(task.id)">
+                <mat-icon>list</mat-icon>
+                <!-- Mise à jour pour utiliser task.subtaskCount -->
+                <span class="badge" matBadge="{{ task.subtasks?.length || 0 }}" matBadgePosition="above after"></span>
+              </button>
+            </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="actions">
+            <mat-header-cell *matHeaderCellDef class="mat-column-actions">Actions</mat-header-cell>
+            <mat-cell *matCellDef="let task">
+              <button mat-icon-button class="blue-button" (click)="viewTask(task)">
+                <mat-icon class="blue-button">visibility</mat-icon>
+              </button>
+            </mat-cell>
+          </ng-container>
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+        <div *ngIf="dataSource.data.length === 0" class="empty-table-message">
+          Aucune tâche disponible.
+        </div>
+        <mat-paginator [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true" aria-label="Sélectionnez la page des tâches"></mat-paginator>
+      </div>
+    </div>
+  </div>
+</div>

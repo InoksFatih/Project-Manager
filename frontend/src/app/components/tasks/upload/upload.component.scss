@@ -1,0 +1,44 @@
+h1 {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+mat-form-field.full-width {
+  width: calc(100% - 2rem); /* Adjust width here */
+  margin-top: 8px;
+  margin-bottom: 1rem; /* Add margin at the bottom for each row */
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1.5rem;
+}
+
+/* Adjust button styles */
+.mat-mdc-dialog-actions {
+  display: flex;
+  justify-content: center; /* Align buttons to the center */
+  gap: 50%; /* Add gap between buttons */
+  margin-bottom: 5px; /* Add margin at the bottom */
+}
+
+/* Adjust margin between dialog content and actions */
+.mat-dialog-content {
+  margin-bottom: 1rem;
+}
+
+/* Set button width for specific buttons */
+.mat-mdc-dialog-actions button {
+  width: auto; /* Let buttons adjust width based on content */
+}
+
+/* Adjust alignment of input */
+.full-width {
+  display: flex;
+  justify-content: space-between; /* Align elements to the far right */
+}
+
+.full-width label {
+  flex-grow: 1; /* Allow label to grow to fill available space */
+}

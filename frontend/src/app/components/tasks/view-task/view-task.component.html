@@ -1,0 +1,24 @@
+<h1 mat-dialog-title>Visualisation de la tâche</h1>
+<div mat-dialog-content class="card">
+  <div class="card-head">Détails de la tâche</div>
+  <div class="card-body">
+    <div *ngIf="selectedTask">
+      <p><strong>Titre:</strong> {{ selectedTask.title }}</p>
+      <p><strong>Date de début:</strong> {{ selectedTask.startDate | date: 'short' }}</p>
+      <p><strong>Date de fin:</strong> {{ selectedTask.endDate | date: 'short' }}</p>
+      <p><strong>Statut:</strong> {{ getStatusValue(selectedTask.status) }}</p>
+      <p><strong>Priorité:</strong> {{ getPriorityValue(selectedTask.priority) }}</p>
+      <p *ngIf="selectedTask.assignPerson"><strong>Personne assignée:</strong> {{ selectedTask.assignPerson.firstName }} {{ selectedTask.assignPerson.lastName }}</p>
+      <p><strong>Jours prévus:</strong> {{ selectedTask.plannedDays }}</p>
+      <p><strong>Jours consommés:</strong> {{ selectedTask.realDaysConsumed }}</p>
+      <div>
+        <strong>Détails:</strong>
+        <textarea rows="10" cols="50" [(ngModel)]="selectedTask.detail" style="resize: vertical;" readonly (input)="onTextareaInput()"></textarea>
+      </div>
+      <button mat-raised-button color="primary" (click)="onCloseClick()">Fermer</button>
+    </div>
+    <div *ngIf="!selectedTask">
+      <p>Aucune tâche sélectionnée.</p>
+    </div>
+  </div>
+</div>

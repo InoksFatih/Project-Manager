@@ -1,6 +1,8 @@
 package com.project.manager.services;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 
 import com.project.manager.models.*;
@@ -26,10 +28,6 @@ public class ManagerInitServiceImpl implements IManagerService{
     private TaskRepo taskRepo;
 
 
-    @Override
-    public void initAttachement() {
-
-    }
     private static final Random random = new Random();
     @Transactional
     @Override
@@ -45,32 +43,34 @@ public class ManagerInitServiceImpl implements IManagerService{
         });
 
     }
-    @Transactional
     @Override
+    @Transactional
     public void initProject() {
-        Stream.of("Project1","Project2","Project3","Project4").forEach(title->{
-            Project project=new Project();
+
+        Stream.of("Project1", "Project2", "Project3").forEach(title -> {
+            Project project = new Project();
             project.setTitle(title);
-            project.setDetail("details");
-            project.setDueDate(new Date());
+            project.setDetail("Test");
+            project.setPlannedDays(30.0);
             project.setStatus(Status.PENDING);
             project.setPriority(Priority.ESSENTIAL);
+
             projectRepo.save(project);
         });
     }
-
     @Override
     @Transactional
     public void initTask() {
-        projectRepo.findAll().forEach(p->{
-            Stream.of("Task1","Task2","Task3","Task4").forEach(title->{
-                Task task=new Task();
+        projectRepo.findAll().forEach(project -> {
+            Stream.of("Tâche1", "Tâche2", "Tâche3", "Tâche4").forEach(title -> {
+                Task task = new Task();
                 task.setTitle(title);
-                task.setDetail("Details");
-                task.setDueDate(new Date());
+                task.setDetail("Test");
+                task.setStartDate(new Date());
+                task.setEndDate(new Date());
                 task.setPriority(Priority.ESSENTIAL);
                 task.setStatus(Status.PENDING);
-                task.setProject(p);
+                task.setProject(project);
                 taskRepo.save(task);
             });
         });
@@ -79,11 +79,10 @@ public class ManagerInitServiceImpl implements IManagerService{
     @Transactional
     public void initSubtask() {
         taskRepo.findAll().forEach(task->{
-            Stream.of("subtask1", "subtask2", "subtask3", "subtask4").forEach(title -> {
+            Stream.of("subtâche1", "subtâche2", "subtâche3", "subtâche4").forEach(title -> {
                 Subtask subtask = new Subtask();
                 subtask.setTitle(title);
-                subtask.setDetail("Details2");
-                subtask.setDueDate(new Date());
+                subtask.setDetail("Test");
                 subtask.setPriority(Priority.ESSENTIAL);
                 subtask.setStatus(Status.PENDING);
                 subtask.setTask(task);
@@ -91,11 +90,6 @@ public class ManagerInitServiceImpl implements IManagerService{
             });
         });
     }
-    @Override
-    public void initUser() {
-
-    }
-
     @Override
     @Transactional
     public void initProjectClient() {

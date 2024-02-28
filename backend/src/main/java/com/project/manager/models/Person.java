@@ -24,9 +24,6 @@ public class Person implements Serializable {
     private boolean isActive;
     private int taskCount;
     private int subtaskCount;
-    @OneToOne
-    @JoinColumn(name = "user_id")
-    private User user;
 
     @OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
     @JsonIgnore

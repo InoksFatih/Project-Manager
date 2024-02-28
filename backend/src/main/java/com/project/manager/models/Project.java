@@ -19,15 +19,15 @@ public class Project implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
-    @Lob
+    @Column(columnDefinition = "TEXT")
     private String detail;
-    private Date dueDate;
+
     @Enumerated(EnumType.STRING)
     private Status status;
     @Enumerated(EnumType.STRING)
     private Priority priority;
-    private String realDaysConsumed;
-    private String plannedDays;
+    private Double realDaysConsumed;
+    private Double plannedDays;
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
     @JsonIgnore
     private Collection<Task> tasks;

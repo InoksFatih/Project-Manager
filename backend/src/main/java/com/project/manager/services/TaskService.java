@@ -14,10 +14,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
+
 @CrossOrigin("*")
 @Service
 public class TaskService {
@@ -32,19 +31,28 @@ public class TaskService {
     @Autowired
     private AttachementService attachementService;
 
+    // Method to add a new task to the app.
     public ResponseEntity<Task> addTask(TaskDTO taskDTO, Long projectId) {
         Optional<Project> projectOptional = projectRepo.findById(projectId);
 
         if (projectOptional.isPresent()) {
             Task task = new Task();
             task.setTitle(taskDTO.getTitle());
-            task.setStatus(Status.valueOfLabel(taskDTO.getStatus()));
-            task.setDueDate(taskDTO.getDueDate());
+            task.setStatus(taskDTO.getStatus());
             task.setDetail(taskDTO.getDetail());
-            task.setPriority(Priority.valueOfLabel(taskDTO.getPriority()));
-            task.setPlannedDays(taskDTO.getPlannedDays());
+            task.setPriority(taskDTO.getPriority());
+
+            // Set the start date from the DTO
+            task.setStartDate(taskDTO.getStartDate());
+
+            if (taskDTO.getPlannedDays() != null) {
+                // Use the provided start date for calculation
+                Date endDate = calculateEndDate(task.getStartDate(), taskDTO.getPlannedDays());
+                task.setEndDate(endDate);
+                task.setPlannedDays(taskDTO.getPlannedDays());
+            }
+
             task.setProject(projectOptional.get());
-            projectOptional.ifPresent(task::setProject);
             taskRepo.save(task);
             return new ResponseEntity<>(task, HttpStatus.OK);
         } else {
@@ -53,6 +61,28 @@ public class TaskService {
     }
 
 
+
+
+    // Helper method to calculate the end date of the task.
+    private Date calculateEndDate(Date startDate, double plannedDays) {
+        // Use Calendar to add planned days to the start date and get the end date.
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(startDate);
+
+        // Calculate the number of whole days.
+        int wholeDays = (int) plannedDays;
+
+        // Calculate the number of remaining milliseconds for fractional days.
+        long remainingMilliseconds = (long) ((plannedDays - wholeDays) * 24 * 60 * 60 * 1000);
+
+        // Add whole days.
+        calendar.add(Calendar.DAY_OF_MONTH, wholeDays);
+
+        // Add remaining milliseconds for fractional days.
+        calendar.add(Calendar.MILLISECOND, (int) remainingMilliseconds);
+
+        return calendar.getTime();
+    }
 
 
     public ResponseEntity<Task> getTaskById(Long id) {
@@ -113,22 +143,111 @@ public class TaskService {
     }
 
     public ResponseEntity<Task> updateTask(Long id, TaskDTO taskDTO) {
-        Optional<Task> oldTask = taskRepo.findById(id);
-        if (oldTask.isPresent()) {
-            Task task = oldTask.get();
-            task.setTitle(taskDTO.getTitle());
-            task.setStatus(Status.valueOfLabel(taskDTO.getStatus()));
-            task.setDueDate(taskDTO.getDueDate());
-            task.setDetail(taskDTO.getDetail());
-            task.setPriority(Priority.valueOfLabel(taskDTO.getPriority()));
-            task.setPlannedDays(taskDTO.getPlannedDays());
-            task.setRealDaysConsumed(taskDTO.getRealDaysConsumed());
+        // Retrieve the existing task based on the provided id.
+        Optional<Task> oldTaskOptional = taskRepo.findById(id);
+
+        // Check if the task exists.
+        if (oldTaskOptional.isPresent()) {
+            // If the task exists, retrieve it.
+            Task task = oldTaskOptional.get();
+
+            // Update task attributes with the provided values from taskDTO if they are not null.
+            if (taskDTO.getTitle() != null) {
+                task.setTitle(taskDTO.getTitle());
+            }
+            if (taskDTO.getStatus() != null) {
+                task.setStatus(taskDTO.getStatus());
+            }
+            if (taskDTO.getDetail() != null) {
+                task.setDetail(taskDTO.getDetail());
+            }
+            if (taskDTO.getPriority() != null) {
+                task.setPriority(taskDTO.getPriority());
+            }
+            if (taskDTO.getRealDaysConsumed() != null) {
+                task.setRealDaysConsumed(taskDTO.getRealDaysConsumed());
+            }
+
+            // Update planned days and recalculate end date if plannedDays is not null.
+            if (taskDTO.getPlannedDays() != null) {
+                // Update planned days.
+                Double oldPlannedDays = task.getPlannedDays() != null ? task.getPlannedDays() : 0.0;
+                Double newPlannedDays = taskDTO.getPlannedDays();
+
+                // Recalculate the end date only if planned days are actually updated.
+                if (!Objects.equals(oldPlannedDays, newPlannedDays)) {
+                    task.setPlannedDays(newPlannedDays);
+                    Date endDate = calculateEndDate(task.getStartDate(), newPlannedDays);
+                    task.setEndDate(endDate);
+                }
+            } else {
+                // If plannedDays is null in taskDTO, remove planned days from the task.
+                task.setPlannedDays(null);
+                // You might want to adjust endDate accordingly in this case as well.
+            }
+
+            // Save the updated task to the repository.
             taskRepo.save(task);
+
+            // Return ResponseEntity with the updated task and HTTP status OK.
             return new ResponseEntity<>(task, HttpStatus.OK);
+        } else {
+            // If the task doesn't exist, return HTTP status NOT_FOUND.
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+
+    private Date calculateEndDate(Date startDate, Date endDate, double oldPlannedDays, double newPlannedDays) {
+        if (startDate == null) {
+            throw new IllegalArgumentException("Start date must not be null");
+        }
+
+        // If plannedDays is 0, set endDate to the same as startDate.
+        if (newPlannedDays == 0) {
+            return startDate;
+        }
+
+        // Calculate the difference in planned days.
+        double plannedDaysDifference = newPlannedDays - oldPlannedDays;
+
+        if (endDate == null) {
+            endDate = startDate;
+        }
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(endDate);
+
+        // Convert planned days difference to hours.
+        int hoursDifference = (int) (plannedDaysDifference * 24);
+
+        // Add the hours difference to the end date.
+        calendar.add(Calendar.HOUR_OF_DAY, hoursDifference);
+
+        return calendar.getTime();
+    }
+
+    public ResponseEntity<List<Project>> getProjectsForPerson(Long personId) {
+        Optional<Person> personOptional = personRepo.findById(personId);
+
+        if (personOptional.isPresent()) {
+            Person person = personOptional.get();
+
+            List<Task> tasks = taskRepo.findByPerson(person);
+            Set<Project> projectsSet = new HashSet<>();
+
+            for (Task task : tasks) {
+                projectsSet.add(task.getProject());
+            }
+
+            List<Project> projects = new ArrayList<>(projectsSet);
+
+            return new ResponseEntity<>(projects, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
 
     public ResponseEntity<Person> getAssignedPersonForTask(Long taskId) {
         Optional<Task> taskOptional = taskRepo.findById(taskId);
@@ -136,14 +255,37 @@ public class TaskService {
             Task task = taskOptional.get();
             Person assignedPerson = task.getPerson();
             if (assignedPerson != null) {
-                return new ResponseEntity<>(assignedPerson, HttpStatus.OK);
+                return ResponseEntity.ok(assignedPerson);
             } else {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                // Return an empty response or a default person object
+                return ResponseEntity.ok(null); // Or return ResponseEntity.ok(new Person());
             }
+        } else {
+            // Return an empty response or a default person object
+            return ResponseEntity.ok(null); // Or return ResponseEntity.ok(new Person());
+        }
+    }
+    public ResponseEntity<List<Task>> getTasksByProjectAndPerson(Long projectId, Long personId) {
+        Optional<Project> projectOptional = projectRepo.findById(projectId);
+        Optional<Person> personOptional = personRepo.findById(personId);
+
+        if (projectOptional.isPresent() && personOptional.isPresent()) {
+            Project project = projectOptional.get();
+            Person person = personOptional.get();
+
+            List<Task> tasks = taskRepo.findByProjectAndPerson(project, person);
+            for (Task task : tasks) {
+                List<Subtask> subtasks = subtaskRepo.findByTask(task);
+                task.setSubtasks(subtasks);
+            }
+
+            return new ResponseEntity<>(tasks, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+
 
     public ResponseEntity<HttpStatus> deleteTask(Long id) {
         Optional<Task> taskOptional = taskRepo.findById(id);

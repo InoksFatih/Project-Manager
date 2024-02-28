@@ -1,0 +1,58 @@
+<h1 mat-dialog-title>{{ data.id ? 'Mettre à jour la tâche' : 'Ajouter une tâche' }}</h1>
+<div mat-dialog-content class="dialog-content">
+  <form #taskForm="ngForm" (ngSubmit)="onSubmit(taskForm)">
+  <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Titre</mat-label>
+      <input matInput name="title" ngModel required [(ngModel)]="data.title">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Priorité</mat-label>
+      <mat-select name="priority" ngModel required [(ngModel)]="data.priority">
+        <mat-option *ngFor="let priority of listePriority" [value]="priority" [ngStyle]="{ 'color': getPriorityColor(priority) } ">
+          {{ this.getPriorityValue(priority) }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Statut</mat-label>
+      <mat-select name="status" ngModel required [(ngModel)]="data.status" [disabled]="!data.id">
+        <mat-option *ngFor="let status of listeStatus" [value]="status" [ngStyle]="{ 'color': getStatusColor(status) }">
+          {{ this.getStatusValue(status) }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Jours prévus</mat-label>
+      <input matInput type="number" step="any" name="plannedDays" ngModel [(ngModel)]="data.plannedDays" min="0" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Jours consommés</mat-label>
+      <input matInput type="number" step="any" name="realDaysConsumed" ngModel [(ngModel)]="data.realDaysConsumed" min="0"
+             [disabled]="!data.id" >
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Date de début</mat-label>
+      <input matInput [matDatepicker]="startDatePicker" placeholder="Start Date" name="startDate" [(ngModel)]="data.startDate" (dateInput)="onStartDateChange($event)"
+             [disabled]="data.id">
+      <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+      <mat-datepicker #startDatePicker></mat-datepicker>
+    </mat-form-field>
+
+    <div class="textarea-container">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Détails</mat-label>
+        <textarea matInput name="detail" ngModel required [(ngModel)]="data.detail" rows="5" class="resizable-textarea"></textarea>
+      </mat-form-field>
+    </div>
+
+    <div class="button-container">
+      <button mat-raised-button color="primary" type="submit">{{ data.id ? 'Mettre à jour' : 'Ajouter' }}</button>
+      <button mat-raised-button mat-dialog-close color="warn" (click)="onNoClick()">Annuler</button>
+    </div>
+  </form>
+</div>

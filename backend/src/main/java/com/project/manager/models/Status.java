@@ -1,9 +1,9 @@
 package com.project.manager.models;
 
 public enum Status {
-    COMPLETED("Completed"),
-    PENDING("Pending"),
-    NOTSTARTED("Not Started", "NotStarted");
+    COMPLETED( "Terminé , Completed"),
+    PENDING("En cours , Pending"),
+    NOTSTARTED("Non commencé , Notstarted");
 
     private final String[] labels;
 

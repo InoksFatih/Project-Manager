@@ -1,0 +1,40 @@
+<div class="card">
+  <div class="card-body">
+    <div class="demo-app">
+      <div class="demo-app-sidebar">
+        <!-- Menu déroulant pour sélectionner des personnes -->
+        <mat-form-field>
+          <mat-label>Sélectionner une personne</mat-label>
+          <mat-select [(value)]="selectedPerson" (selectionChange)="handlePersonChange($event.value)">
+            <mat-option [value]="null">Aucun</mat-option>
+            <mat-option *ngFor="let person of persons" [value]="person">{{ person.firstName }} {{ person.lastName }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <!-- Menu déroulant pour sélectionner des projets -->
+        <mat-form-field>
+          <mat-label>Sélectionner un projet</mat-label>
+          <mat-select [(value)]="selectedProject" [disabled]="!selectedPerson" (selectionChange)="handleProjectChange($event.value)">
+            <mat-option [value]="null">Aucun</mat-option>
+            <mat-option *ngFor="let project of projects" [value]="project">{{ project.title }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+      </div>
+
+      <div class="demo-app-main" [class.sidenav-open]="calendarVisible">
+        <!-- Contenu du calendrier -->
+        <full-calendar
+          #fullCalendar
+          *ngIf="calendarVisible"
+          [options]="calendarOptions"
+        >
+          <ng-template #eventContent let-data>
+            <i>{{ data.event.title }}</i>
+          </ng-template>
+        </full-calendar>
+
+      </div>
+    </div>
+  </div>
+
+</div>

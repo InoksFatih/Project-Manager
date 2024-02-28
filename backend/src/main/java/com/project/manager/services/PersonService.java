@@ -33,16 +33,6 @@ public class PersonService {
     @Autowired
     private SubtaskRepo subtaskRepo;
 
-    public ResponseEntity<Person> addPerson(PersonDTO personDTO) {
-        Person person = new Person();
-        person.setFirstName(personDTO.getFirstName());
-        person.setLastName(personDTO.getLastName());
-        person.setEmail(personDTO.getEmail());
-        person.setPhoneNumber(personDTO.getPhoneNumber());
-        personRepo.save(person);
-        return new ResponseEntity<>(person, HttpStatus.OK);
-    }
-
     public ResponseEntity<Person> getPersonById(Long id) {
         Optional<Person> personData = personRepo.findById(id);
 
@@ -150,28 +140,5 @@ public class PersonService {
             // Person or Task not found
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-    }
-
-
-
-
-    public ResponseEntity<Person> updatePerson(Long id, PersonDTO personDTO) {
-        Optional<Person> oldPerson = personRepo.findById(id);
-        if (oldPerson.isPresent()) {
-            Person person = oldPerson.get();
-            person.setFirstName(personDTO.getFirstName());
-            person.setLastName(personDTO.getLastName());
-            person.setEmail(personDTO.getEmail());
-            person.setPhoneNumber(personDTO.getPhoneNumber());
-            personRepo.save(person);
-            return new ResponseEntity<>(person, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
-
-    public ResponseEntity<HttpStatus> deletePerson(Long id) {
-        personRepo.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

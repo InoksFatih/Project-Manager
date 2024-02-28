@@ -2,8 +2,8 @@ package com.project.manager.models;
 
 public enum Priority {
     IMPORTANT("Important"),
-    ESSENTIAL("Essential"),
-    SECONDAIRE("Secondaire");
+    ESSENTIAL("Essentiel , Essential"),
+    SECONDARY("Secondaire , Secondary");
 
     private final String label;
 

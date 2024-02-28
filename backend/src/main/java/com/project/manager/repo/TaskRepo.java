@@ -1,5 +1,6 @@
 package com.project.manager.repo;
 
+import com.project.manager.models.Person;
 import com.project.manager.models.Project;
 import com.project.manager.models.Task;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,7 +14,7 @@ import java.util.Optional;
 @RepositoryRestResource
 @CrossOrigin("*")
 public interface TaskRepo extends JpaRepository<Task, Long> {
-    Optional<Task> findByTitle(String title);
-
+    List<Task> findByProjectAndPerson(Project project, Person person);
     List<Task> findByProject(Project project);
+    List<Task> findByPerson(Person person);
 }

@@ -12,6 +12,6 @@ public interface AttachementService {
         Attachement getAttachement(Long fileId) throws Exception;
         void deleteAttachementByTaskId(Long taskId) throws Exception;
         Attachement updateAttachement(Long fileId, MultipartFile file, Long taskId) throws Exception;
-        List<Attachement> getAllAttachements() throws Exception;
-        Attachement getAttachementByTask(Long taskId) throws Exception;
+
+        Attachement getAttachementByTask(Long taskId);
 }

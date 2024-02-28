@@ -32,7 +32,11 @@ public class TaskController {
         ResponseEntity<List<Task>> allTasks = taskService.getAllTasks();
         return allTasks;
     }
-
+    @GetMapping("/tasksByProjectAndPerson/{projectId}/{personId}")
+    public ResponseEntity<List<Task>> getTasksByProjectAndPerson(@PathVariable Long projectId, @PathVariable Long personId) {
+        ResponseEntity<List<Task>> tasksByProjectAndPerson = taskService.getTasksByProjectAndPerson(projectId, personId);
+        return tasksByProjectAndPerson;
+    }
     @GetMapping("/getTasksByProject/{projectId}")
     public ResponseEntity<List<Task>> getTasksByProject(@PathVariable Long projectId) {
         ResponseEntity<List<Task>> tasksByProject = taskService.getTasksByProject(projectId);

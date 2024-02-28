@@ -97,22 +97,19 @@ public class AttachementServiceImpl implements AttachementService {
         }
     }
 
-   @Override
-   public List<Attachement> getAllAttachements() throws Exception {
-       try {
-           return attachementRepo.findAll();
-       } catch (Exception e) {
-           throw new Exception("Error retrieving attachements: " + e.getMessage());
-       }
-   }
+
 
     @Override
-    public Attachement getAttachementByTask(Long taskId) throws Exception {
-        Task task = taskRepo.findById(taskId)
-                .orElseThrow(() -> new Exception("Task not found with ID: " + taskId));
+    public Attachement getAttachementByTask(Long taskId) {
+        Task task = taskRepo.findById(taskId).orElse(null);
+
+        if (task == null) {
+            return null; // Task not found
+        }
 
         return task.getAttachement();
     }
+
 
     @Override
     public void deleteAttachementByTaskId(Long taskId) throws Exception {

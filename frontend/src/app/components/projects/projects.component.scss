@@ -1,0 +1,182 @@
+.empty-table-message {
+  padding: 16px;
+  text-align: center;
+  font-style: italic;
+  color: #888;
+}
+
+.success-notification {
+  background-color: #4caf50;
+  color: white;
+}
+
+.error-notification {
+  background-color: #f44336;
+}
+
+.card-body {
+  padding: 15px;
+
+  .card-toolbar {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+.card-body-buttons {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+
+  mat-form-field {
+    margin-right: 5rem;
+  }
+}
+
+
+mat-header-cell,
+mat-cell {
+  justify-content: center;
+}
+
+.mat-column-priority {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mat-column {
+  margin: 0;
+}
+
+::ng-deep .mat-mdc-form-field-subscript-wrapper,
+::ng-deep .mat-mdc-form-field-bottom-align {
+  display: none !important;
+}
+
+.mat-form-field-center {
+  display: flex;
+  justify-content: center;
+  margin-top: 11px;
+  margin-bottom: 11px;
+}
+
+.green-button {
+  color: green;
+}
+.blue-button {
+  color: blue;
+}
+
+.red-button {
+  color: red;
+}
+
+.table-container {
+  width: 100%;
+  max-width: 100vw; /* Ensure the container doesn't extend beyond the viewport width */
+  overflow-x: auto; /* Allow horizontal scrolling within the container */
+  margin: 0 auto; /* Center the table container */
+}
+
+.mat-table {
+  width: max-content; /* Set the table width to the content width */
+}
+
+.mat-form-field {
+  margin-right: 20px; /* Increase spacing between form fields */
+}
+
+.card-body-buttons {
+  padding: 1rem 2rem; /* Add padding to the button container */
+}
+
+.empty-table-message {
+  padding: 16px 0; /* Add vertical padding to the empty table message */
+}
+
+.card-body {
+  padding: 1rem; /* Add padding to the card body */
+}
+
+.card-head {
+  padding: 1rem; /* Add padding to the card header */
+}
+.mat-column-title {
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 20% !important;
+  width: 20% !important;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+  text-align: center!important;
+}
+
+.mat-column-status {
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 20% !important;
+  width: 20% !important;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+.mat-column-priority {
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 20% !important;
+  width: 20% !important;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+.mat-column-projectClient {
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 15% !important;
+  width: 15% !important;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+.mat-column-tasks {
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 12% !important;
+  width: 12% !important;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+.mat-column-actions {
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 13% !important;
+  width: 13% !important;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}

@@ -74,70 +74,35 @@ public class AttachementController {
         }
     }
 
-    @GetMapping("/getAllAttachements")
-    public ResponseEntity<List<AttachementDTO>> getAllAttachements() {
-        try {
-            List<Attachement> attachements = attachementService.getAllAttachements();
 
-            List<AttachementDTO> attachementDTOs = new ArrayList<>();
-            for (Attachement attachement : attachements) {
-                String downloadUrl = generateDownloadUrl(attachement.getId());
-
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-                String formattedUploadDate = attachement.getUploadDate()
-                        .toInstant()
-                        .atZone(ZoneId.systemDefault())
-                        .format(formatter);
-
-                AttachementDTO attachementDTO = new AttachementDTO(
-                        attachement.getId(),
-                        attachement.getFileName(),
-                        downloadUrl,
-                        attachement.getFileType(),
-                        Long.toString(Long.parseLong(attachement.getFileSize())),
-                        formattedUploadDate
-                );
-                attachementDTOs.add(attachementDTO);
-            }
-
-            return ResponseEntity.ok().body(attachementDTOs);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
-    }
     @GetMapping("/getAttachementByTask/{taskId}")
     public ResponseEntity<AttachementDTO> getAttachementByTask(@PathVariable Long taskId) {
-        try {
+        Attachement attachement = attachementService.getAttachementByTask(taskId);
 
-            Attachement attachement = attachementService.getAttachementByTask(taskId);
-
-            if (attachement == null) {
-                return ResponseEntity.notFound().build();
-            }
-
-
-            String downloadUrl = generateDownloadUrl(attachement.getId());
-
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-            String formattedUploadDate = attachement.getUploadDate()
-                    .toInstant()
-                    .atZone(ZoneId.systemDefault())
-                    .format(formatter);
-
-            AttachementDTO attachementDTO = new AttachementDTO(
-                    attachement.getId(),
-                    attachement.getFileName(),
-                    downloadUrl,
-                    attachement.getFileType(),
-                    formattedUploadDate,
-                    Long.toString(Long.parseLong(attachement.getFileSize()))
-            );
-
-            return ResponseEntity.ok().body(attachementDTO);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        if (attachement == null) {
+            return ResponseEntity.notFound().build();
         }
+
+        String downloadUrl = generateDownloadUrl(attachement.getId());
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String formattedUploadDate = attachement.getUploadDate()
+                .toInstant()
+                .atZone(ZoneId.systemDefault())
+                .format(formatter);
+
+        AttachementDTO attachementDTO = new AttachementDTO(
+                attachement.getId(),
+                attachement.getFileName(),
+                downloadUrl,
+                attachement.getFileType(),
+                formattedUploadDate,
+                Long.toString(Long.parseLong(attachement.getFileSize()))
+        );
+
+        return ResponseEntity.ok().body(attachementDTO);
     }
+
 
     @GetMapping("/downloadFile/{fileId}")
     public ResponseEntity<Resource> downloadFile(@PathVariable Long fileId) {

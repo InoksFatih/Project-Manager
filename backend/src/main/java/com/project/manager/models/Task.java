@@ -20,13 +20,15 @@ public class Task implements Serializable {
     private String title;
     @Column(columnDefinition = "TEXT")
     private String detail;
-    private Date dueDate;
+    private Date startDate;
+    private Date endDate;
     @Enumerated(EnumType.STRING)
     private Status status;
     @Enumerated(EnumType.STRING)
     private Priority priority;
-    private double realDaysConsumed;
-    private double plannedDays;
+    private Double realDaysConsumed;
+    private Double plannedDays;
+
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JsonIgnore

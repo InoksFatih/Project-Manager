@@ -1,0 +1,20 @@
+<h1 mat-dialog-title>Visualisation de la sous-tâche</h1>
+<div mat-dialog-content class="card">
+  <div class="card-head">Détails de la sous-tâche</div>
+  <div class="card-body">
+    <div *ngIf="selectedSubtask">
+      <p><strong>Titre :</strong> {{ selectedSubtask.title }}</p>
+      <p><strong>Statut :</strong> {{ getStatusValue(selectedSubtask.status) }}</p>
+      <p><strong>Priorité :</strong> {{ getPriorityValue(selectedSubtask.priority) }}</p>
+      <p *ngIf="selectedSubtask.assignPerson"><strong>Assigner à :</strong> {{ selectedSubtask.assignPerson.firstName }} {{ selectedSubtask.assignPerson.lastName }}</p>
+      <div>
+        <strong>Détails :</strong>
+        <textarea rows="10" cols="50" [(ngModel)]="selectedSubtask.detail" style="resize: vertical;" readonly (input)="onTextareaInput()"></textarea>
+      </div>
+      <button mat-raised-button color="primary" (click)="onCloseClick()">Fermer</button>
+    </div>
+    <div *ngIf="!selectedSubtask">
+      <p>Aucune sous-tâche sélectionnée.</p>
+    </div>
+  </div>
+</div>

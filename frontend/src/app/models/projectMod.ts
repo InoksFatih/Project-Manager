@@ -7,11 +7,10 @@ export class Project {
   id?: number;
   title!: string;
   detail!: string;
-  dueDate!: Date | null;
   status!: Status;
   priority!: Priority;
   projectClient?: ProjectClient;
-  realDaysConsumed!: string;
-  plannedDays!: string;
+  realDaysConsumed?: number | null;
+  plannedDays?: number | null;
   tasks?: Task[];
 }

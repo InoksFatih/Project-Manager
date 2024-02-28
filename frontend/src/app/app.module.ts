@@ -4,16 +4,14 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { BodyComponent } from './body/body.component';
-import { SidenavComponent } from './sidenav/sidenav.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { ProjectsComponent } from './projects/projects.component';
-import { TasksComponent } from './tasks/tasks.component';
-import { NotificationsComponent } from './notifications/notifications.component';
-import { MytasksComponent } from './mytasks/mytasks.component';
-import { ProfileComponent } from './profile/profile.component';
-import { SubtasksComponent } from './subtasks/subtasks.component';
-import { HeaderComponent } from './header/header.component';
+import { BodyComponent } from './components/body/body.component';
+import { SidenavComponent } from './components/sidenav/sidenav.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { ProjectsComponent } from './components/projects/projects.component';
+import { TasksComponent } from './components/tasks/tasks.component';
+import { MytasksComponent } from './components/mytasks/mytasks.component';
+import { SubtasksComponent } from './components/subtasks/subtasks.component';
+import { HeaderComponent } from './components/header/header.component';
 import { HttpClientModule } from '@angular/common/http';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -27,23 +25,23 @@ import {MatDialogActions, MatDialogClose, MatDialogContent, MatDialogTitle} from
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
-import { FormProjectComponent } from './projects/form-project/form-project.component';
-import { FormTaskComponent } from './tasks/form-task/form-task.component';
-import { FormSubtaskComponent } from './subtasks/form-subtask/form-subtask.component';
+import { FormProjectComponent } from './components/projects/form-project/form-project.component';
+import { FormTaskComponent } from './components/tasks/form-task/form-task.component';
+import { FormSubtaskComponent } from './components/subtasks/form-subtask/form-subtask.component';
 import { CalendarModule, DateAdapter, MOMENT } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/moment';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import moment from 'moment';
-import { CalendarComponent } from './calendar/calendar.component';
+import { CalendarComponent } from './components/calendar/calendar.component';
 import {NgOptimizedImage} from "@angular/common";
 import {MatButtonToggle} from "@angular/material/button-toggle";
 import {CdkMenu, CdkMenuTrigger} from "@angular/cdk/menu";
 import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 import {MatBadge} from "@angular/material/badge";
-import { UploadComponent } from './tasks/upload/upload.component';
-import { ViewTaskComponent } from './tasks/view-task/view-task.component';
-import { ViewProjectComponent } from './projects/view-project/view-project.component';
-import { ViewSubtaskComponent } from './subtasks/view-subtask/view-subtask.component';
+import { UploadComponent } from './components/tasks/upload/upload.component';
+import { ViewTaskComponent } from './components/tasks/view-task/view-task.component';
+import { ViewProjectComponent } from './components/projects/view-project/view-project.component';
+import { ViewSubtaskComponent } from './components/subtasks/view-subtask/view-subtask.component';
 import {MatDivider} from "@angular/material/divider";
 import {ScheduleModule ,DayService, WeekService, WorkWeekService, MonthService, AgendaService, MonthAgendaService, TimelineViewsService, TimelineMonthService} from "@syncfusion/ej2-angular-schedule";
 import {FullCalendarModule} from "@fullcalendar/angular";
@@ -58,9 +56,7 @@ import {FullCalendarModule} from "@fullcalendar/angular";
     DashboardComponent,
     ProjectsComponent,
     TasksComponent,
-    NotificationsComponent,
     MytasksComponent,
-    ProfileComponent,
     SubtasksComponent,
     HeaderComponent,
     FormProjectComponent,

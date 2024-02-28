@@ -1,0 +1,39 @@
+<h1 mat-dialog-title>{{ data.id ? 'Mettre à jour la sous-tâche' : 'Ajouter une sous-tâche' }}</h1>
+<div mat-dialog-content class="dialog-content">
+  <form #subtaskForm="ngForm" (ngSubmit)="onSubmit(subtaskForm)">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Titre</mat-label>
+      <input matInput name="title" ngModel required [(ngModel)]="data.title">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Priorité</mat-label>
+      <mat-select name="priority" ngModel required [(ngModel)]="data.priority">
+        <mat-option *ngFor="let priority of listePriority" [value]="priority" [ngStyle]="{ 'color': getPriorityColor(priority) } ">
+          {{ this.getPriorityValue(priority) }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Statut</mat-label>
+      <mat-select name="status" ngModel required [(ngModel)]="data.status" [disabled]="!data.id">
+        <mat-option *ngFor="let status of listeStatus" [value]="status" [ngStyle]="{ 'color': getStatusColor(status) }">
+          {{ this.getStatusValue(status) }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div class="textarea-container">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Détails</mat-label>
+        <textarea matInput name="detail" ngModel required [(ngModel)]="data.detail" rows="5" class="resizable-textarea"></textarea>
+      </mat-form-field>
+    </div>
+
+    <div class="button-container">
+      <button mat-raised-button color="primary" type="submit">{{ data.id ? 'Mettre à jour' : 'Ajouter' }}</button>
+      <button mat-raised-button mat-dialog-close color="warn" (click)="onNoClick()">Annuler</button>
+    </div>
+  </form>
+</div>

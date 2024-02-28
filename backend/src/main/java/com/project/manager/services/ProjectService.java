@@ -1,6 +1,6 @@
 package com.project.manager.services;
 
-import com.project.manager.dto.ProjectClientDTO;
+
 import com.project.manager.dto.ProjectDTO;
 import com.project.manager.models.*;
 import com.project.manager.repo.*;
@@ -11,10 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @CrossOrigin("*")
 @Service
@@ -31,21 +28,34 @@ public class ProjectService {
     @Autowired
     private ProjectClientRepo projectClientRepo;
 
+    // Method to add a new project to the app.
     public ResponseEntity<Project> addProject(ProjectDTO projectDTO, Long projectClientId) {
+        // Retrieve the project client based on the provided projectClientId.
         Optional<ProjectClient> projectClientOptional = projectClientRepo.findById(projectClientId);
 
+        // Check if the project client exists.
         if (projectClientOptional.isPresent()) {
+            // If the project client exists, create a new Project instance, with the following properties.
             Project project = new Project();
+
             project.setTitle(projectDTO.getTitle());
-            project.setStatus(Status.valueOfLabel(projectDTO.getStatus()));
-            project.setDueDate(projectDTO.getDueDate());
+
+            project.setStatus(projectDTO.getStatus());
+
             project.setDetail(projectDTO.getDetail());
-            project.setPriority(Priority.valueOfLabel(projectDTO.getPriority()));
+
+            project.setPriority(projectDTO.getPriority());
+
             project.setProjectClient(projectClientOptional.get());
+
             project.setPlannedDays(projectDTO.getPlannedDays());
+
             projectRepo.save(project);
+
+            // Return ResponseEntity with the added project and HTTP status OK.
             return new ResponseEntity<>(project, HttpStatus.OK);
         } else {
+            // If project client doesn't exist, return HTTP status NOT_FOUND.
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -79,10 +89,9 @@ public class ProjectService {
         if (oldProjectOptional.isPresent()) {
             Project updatedProject = oldProjectOptional.get();
             updatedProject.setTitle(projectDTO.getTitle());
-            updatedProject.setStatus((Status.valueOfLabel(projectDTO.getStatus())));
-            updatedProject.setDueDate(projectDTO.getDueDate());
+            updatedProject.setStatus(projectDTO.getStatus());
             updatedProject.setDetail(projectDTO.getDetail());
-            updatedProject.setPriority((Priority.valueOfLabel(projectDTO.getPriority())));
+            updatedProject.setPriority(projectDTO.getPriority());
             updatedProject.setPlannedDays(projectDTO.getPlannedDays());
             updatedProject.setRealDaysConsumed(projectDTO.getRealDaysConsumed());
             projectRepo.save(updatedProject);

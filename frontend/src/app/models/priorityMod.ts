@@ -1,5 +1,5 @@
 export enum Priority {
-  ESSENTIAL = 'Essential',
-  IMPORTANT = 'Important',
-  SECONDAIRE = 'Secondaire'
+  ESSENTIAL = 'ESSENTIAL',
+  IMPORTANT = 'IMPORTANT',
+  SECONDARY = 'SECONDARY'
 }

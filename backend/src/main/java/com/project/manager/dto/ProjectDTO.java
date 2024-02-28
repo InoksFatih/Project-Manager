@@ -21,20 +21,12 @@ public class ProjectDTO {
     private Long id;
     private String title;
     private String detail;
-    private Date dueDate;
     private ProjectClientDTO projectClient;
-    private String status;
-    private String priority;
-    private String realDaysConsumed;
-    private String plannedDays;
+    private Status status;
+    private Priority priority;
+    private Double realDaysConsumed;
+    private Double plannedDays;
 
-    public Status getStatusEnum() {
-        return Status.valueOfLabel(normalizeLabel(status));
-    }
-
-    public Priority getPriorityEnum() {
-        return Priority.valueOfLabel(priority);
-    }
 
     private String normalizeLabel(String label) {
         // Normalize the label by converting it to lowercase and removing spaces

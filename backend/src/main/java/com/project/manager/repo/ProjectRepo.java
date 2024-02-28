@@ -12,6 +12,5 @@ import java.util.Optional;
 @RepositoryRestResource
 @CrossOrigin("*")
 public interface ProjectRepo extends JpaRepository<Project, Long> {
-    Optional<Project> findByTitle(String title);
 
 }

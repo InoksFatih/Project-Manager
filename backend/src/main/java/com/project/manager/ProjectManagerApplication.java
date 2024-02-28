@@ -1,8 +1,6 @@
 package com.project.manager;
 
-import com.project.manager.services.AttachementService;
 import com.project.manager.services.IManagerService;
-import com.project.manager.services.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -21,11 +19,9 @@ public class ProjectManagerApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		managerService.initProject();
-		managerService.initAttachement();
 		managerService.initPerson();
 		managerService.initTask();
 		managerService.initSubtask();
-		managerService.initUser();
 		managerService.initProjectClient();
 }
 }

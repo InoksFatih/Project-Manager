@@ -18,18 +18,14 @@ import java.util.Date;
 public class TaskDTO {
     private String title;
     private String detail;
-    private Date dueDate;
-    private String status;
-    private String priority;
-    private double realDaysConsumed;
-    private double plannedDays;
-    public Status getStatusEnum() {
-        return Status.valueOfLabel(status);
-    }
+    private Date startDate;
+    private Date endDate;
+    private Status status;
+    private Priority priority;
+    private Double realDaysConsumed;
+    private Double plannedDays;
 
-    public Priority getPriorityEnum() {
-        return Priority.valueOfLabel(priority);
-    }
+
 
     private String normalizeLabel(String label) {
         // Normalize the label by converting it to lowercase and removing spaces

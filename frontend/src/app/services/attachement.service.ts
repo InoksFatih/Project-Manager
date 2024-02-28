@@ -23,11 +23,6 @@ export class AttachementService {
     })
   }
 
-  getAllAttachements(): Observable<Attachement[]> {
-    return this.http.get<Attachement[]>(`${this.baseUrl}/getAllAttachements`).pipe(
-    );
-  }
-
   getAttachementByTask(taskId: number): Observable<Attachement> {
     return this.http.get<Attachement>(`${this.baseUrl}/getAttachementByTask/${taskId}`).pipe(
     );

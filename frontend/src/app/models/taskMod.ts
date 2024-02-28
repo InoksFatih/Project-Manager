@@ -8,13 +8,14 @@ export class Task {
   id?: number;
   title!: string;
   detail!: string;
-  dueDate!: Date | null;
+  startDate!: Date | null;
+  endDate!: Date | null;
   status!: Status;
   priority!: Priority;
   projectId?: number;
   assignPerson?: Person | null;
-  realDaysConsumed?: number;
-  plannedDays?: number;
+  realDaysConsumed?: number | null;
+  plannedDays?: number | null;
   subtasks?: Subtask[];
   attachement?: Attachement; // Add the attachement property
 

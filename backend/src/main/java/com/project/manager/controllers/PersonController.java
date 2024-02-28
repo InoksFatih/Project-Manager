@@ -2,6 +2,7 @@ package com.project.manager.controllers;
 
 import com.project.manager.dto.PersonDTO;
 import com.project.manager.models.Person;
+import com.project.manager.models.Task;
 import com.project.manager.services.PersonService;
 import com.project.manager.services.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +19,6 @@ public class PersonController {
     private PersonService personService;
     @Autowired
     private TaskService taskService;
-
-
-    @PostMapping("/addPerson")
-    public ResponseEntity<Person> addPerson(@RequestBody PersonDTO personDTO) {
-        return personService.addPerson(personDTO);
-    }
 
     @GetMapping("/getPerson/{id}")
     public ResponseEntity<Person> getPersonById(@PathVariable Long id) {
@@ -47,22 +42,9 @@ public class PersonController {
         return personService.removePersonFromTask(personId, taskId);
     }
 
-
     @GetMapping("/getAllPersons")
     public ResponseEntity<List<Person>> getAllPersons() {
         ResponseEntity<List<Person>> allPersons = personService.getAllPersons();
         return allPersons;
     }
-
-    @PutMapping("/updatePerson/{id}")
-    public ResponseEntity<Person> updatePerson(@PathVariable Long id, @RequestBody PersonDTO personDTO) {
-        return personService.updatePerson(id, personDTO);
-    }
-
-    @DeleteMapping("/deletePerson/{id}")
-    public ResponseEntity<HttpStatus> deletePerson(@PathVariable Long id) {
-        ResponseEntity<HttpStatus> deletedPerson = personService.deletePerson(id);
-        return deletedPerson;
-    }
-
 }

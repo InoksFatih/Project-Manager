@@ -1,0 +1,22 @@
+<h1 mat-dialog-title>Détails du projet</h1>
+<div mat-dialog-content class="card">
+  <div class="card-head">Détails du projet</div>
+  <div class="card-body">
+    <div *ngIf="selectedProject">
+      <p><strong>Titre :</strong> {{ selectedProject.title }}</p>
+      <p><strong>Statut :</strong> {{ getStatusValue(selectedProject.status) }}</p>
+      <p><strong>Priorité :</strong> {{ getPriorityValue(selectedProject.priority) }}</p>
+      <p><strong>Clients du projet :</strong> {{ selectedProject.projectClient?.name }}</p>
+      <p><strong>Jours prévus :</strong> {{ selectedProject.plannedDays }}</p>
+      <p><strong>Jours consommés :</strong> {{ selectedProject.realDaysConsumed }}</p>
+      <div>
+        <strong>Détails :</strong>
+        <textarea rows="10" cols="50" [(ngModel)]="selectedProject.detail" style="resize: vertical;" readonly (input)="onTextareaInput()"></textarea>
+      </div>
+      <button mat-raised-button color="primary" (click)="onCloseClick()">Fermer</button>
+    </div>
+    <div *ngIf="!selectedProject">
+      <p>Aucun projet sélectionné.</p>
+    </div>
+  </div>
+</div>

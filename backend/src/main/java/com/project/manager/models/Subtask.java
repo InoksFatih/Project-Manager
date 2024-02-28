@@ -20,13 +20,11 @@ public class Subtask implements Serializable {
     private String title;
     @Column(columnDefinition = "TEXT")
     private String detail;
-    private Date dueDate;
     @Enumerated(EnumType.STRING)
     private Status status;
     @Enumerated(EnumType.STRING)
     private Priority priority;
-    private double realDaysConsumed;
-    private double plannedDays;
+
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JsonIgnore

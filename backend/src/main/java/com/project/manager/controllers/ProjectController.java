@@ -4,6 +4,7 @@ import com.project.manager.dto.ProjectDTO;
 import com.project.manager.models.Project;
 import com.project.manager.models.ProjectClient;
 import com.project.manager.services.ProjectService;
+import com.project.manager.services.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,8 @@ public class ProjectController {
 
     @Autowired
     private ProjectService projectService;
+    @Autowired
+    private TaskService taskService;
 
     @PostMapping("/addProject/{projectClientId}")
     public ResponseEntity<Project> addProject(@RequestBody ProjectDTO projectDTO, @PathVariable Long projectClientId) {
@@ -27,7 +30,11 @@ public class ProjectController {
         ResponseEntity<Project> projectById = projectService.getProjectById(id);
         return projectById;
     }
-
+    @GetMapping("/getProjectsByPerson/{personId}")
+    public ResponseEntity<List<Project>> getProjectsByPerson(@PathVariable Long personId) {
+        ResponseEntity<List<Project>> projectsByPerson = taskService.getProjectsForPerson(personId);
+        return projectsByPerson;
+    }
     @GetMapping("/getAllProjects")
     public ResponseEntity<List<Project>> getAllProjects() {
         ResponseEntity<List<Project>> allProjects = projectService.getAllProjects();
